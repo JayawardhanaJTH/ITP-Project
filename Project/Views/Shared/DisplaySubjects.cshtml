@@ -1,0 +1,14 @@
+﻿@model Project.Models.subject
+
+<option value="">-- Select Subject --</option>
+
+@if (ViewBag.subList != null)
+{
+    
+        foreach (var item in ViewBag.subList)
+        {
+            <option value="@item.Value">@item.Text</option>
+        }
+    
+
+}

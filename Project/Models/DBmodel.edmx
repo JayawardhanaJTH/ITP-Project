@@ -1,0 +1,234 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="tutionclassmanagementModel.Store" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.5" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="grade">
+          <Key>
+            <PropertyRef Name="grade_id" />
+          </Key>
+          <Property Name="grade_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="grade" Type="varchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="subject">
+          <Key>
+            <PropertyRef Name="subject_id" />
+          </Key>
+          <Property Name="subject_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="subject" Type="varchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="teacher">
+          <Key>
+            <PropertyRef Name="teacher_id" />
+          </Key>
+          <Property Name="teacher_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="teacher_name" Type="varchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="teacher_grade">
+          <Key>
+            <PropertyRef Name="grade_id" />
+            <PropertyRef Name="teacher_id" />
+          </Key>
+          <Property Name="grade_id" Type="int" Nullable="false" />
+          <Property Name="teacher_id" Type="int" Nullable="false" />
+          <Property Name="grade" Type="varchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="teacher_subject">
+          <Key>
+            <PropertyRef Name="subject_id" />
+            <PropertyRef Name="teacher_id" />
+          </Key>
+          <Property Name="subject_id" Type="int" Nullable="false" />
+          <Property Name="teacher_id" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="upload_file">
+          <Key>
+            <PropertyRef Name="file_id" />
+          </Key>
+          <Property Name="file_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="file_name" Type="longtext" Nullable="false" />
+          <Property Name="upload_date" Type="datetime" Precision="0" Nullable="false" />
+          <Property Name="file_path" Type="longtext" Nullable="false" />
+          <Property Name="subject" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="grade" Type="varchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="upload_file_teacher">
+          <Key>
+            <PropertyRef Name="file_id" />
+            <PropertyRef Name="teacher_id" />
+          </Key>
+          <Property Name="file_id" Type="int" Nullable="false" />
+          <Property Name="teacher_id" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityContainer Name="tutionclassmanagementModelStoreContainer">
+          <EntitySet Name="grade" EntityType="Self.grade" Schema="tutionclassmanagement" store:Type="Tables" />
+          <EntitySet Name="subject" EntityType="Self.subject" Schema="tutionclassmanagement" store:Type="Tables" />
+          <EntitySet Name="teacher" EntityType="Self.teacher" Schema="tutionclassmanagement" store:Type="Tables" />
+          <EntitySet Name="teacher_grade" EntityType="Self.teacher_grade" Schema="tutionclassmanagement" store:Type="Tables" />
+          <EntitySet Name="teacher_subject" EntityType="Self.teacher_subject" Schema="tutionclassmanagement" store:Type="Tables" />
+          <EntitySet Name="upload_file" EntityType="Self.upload_file" Schema="tutionclassmanagement" store:Type="Tables" />
+          <EntitySet Name="upload_file_teacher" EntityType="Self.upload_file_teacher" Schema="tutionclassmanagement" store:Type="Tables" />
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="tutionclassmanagementModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="grade">
+          <Key>
+            <PropertyRef Name="grade_id" />
+          </Key>
+          <Property Name="grade_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="grade1" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+        </EntityType>
+        <EntityType Name="subject">
+          <Key>
+            <PropertyRef Name="subject_id" />
+          </Key>
+          <Property Name="subject_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="subject1" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+        </EntityType>
+        <EntityType Name="upload_file">
+          <Key>
+            <PropertyRef Name="file_id" />
+          </Key>
+          <Property Name="file_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="file_name" Type="String" MaxLength="1073741823" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="upload_date" Type="DateTime" Nullable="false" />
+          <Property Name="file_path" Type="String" MaxLength="1073741823" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="subject" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="grade" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+        </EntityType>
+        <EntityType Name="upload_file_teacher">
+          <Key>
+            <PropertyRef Name="file_id" />
+            <PropertyRef Name="teacher_id" />
+          </Key>
+          <Property Name="file_id" Type="Int32" Nullable="false" />
+          <Property Name="teacher_id" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityContainer Name="dbModels" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="grades" EntityType="Self.grade" />
+          <EntitySet Name="subjects" EntityType="Self.subject" />
+          <EntitySet Name="upload_file" EntityType="Self.upload_file" />
+          <EntitySet Name="upload_file_teacher" EntityType="Self.upload_file_teacher" />
+          <EntitySet Name="teachers" EntityType="tutionclassmanagementModel.teacher" />
+          <EntitySet Name="teacher_grade" EntityType="tutionclassmanagementModel.teacher_grade" />
+          <EntitySet Name="teacher_subject" EntityType="tutionclassmanagementModel.teacher_subject" />
+        </EntityContainer>
+        <EntityType Name="teacher">
+          <Key>
+            <PropertyRef Name="teacher_id" />
+          </Key>
+          <Property Name="teacher_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="teacher_name" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="teacher_grade">
+          <Key>
+            <PropertyRef Name="grade_id" />
+            <PropertyRef Name="teacher_id" />
+          </Key>
+          <Property Name="grade_id" Type="Int32" Nullable="false" />
+          <Property Name="teacher_id" Type="Int32" Nullable="false" />
+          <Property Name="grade" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="teacher_subject">
+          <Key>
+            <PropertyRef Name="subject_id" />
+            <PropertyRef Name="teacher_id" />
+          </Key>
+          <Property Name="subject_id" Type="Int32" Nullable="false" />
+          <Property Name="teacher_id" Type="Int32" Nullable="false" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="tutionclassmanagementModelStoreContainer" CdmEntityContainer="dbModels">
+          <EntitySetMapping Name="grades">
+            <EntityTypeMapping TypeName="tutionclassmanagementModel.grade">
+              <MappingFragment StoreEntitySet="grade">
+                <ScalarProperty Name="grade_id" ColumnName="grade_id" />
+                <ScalarProperty Name="grade1" ColumnName="grade" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="subjects">
+            <EntityTypeMapping TypeName="tutionclassmanagementModel.subject">
+              <MappingFragment StoreEntitySet="subject">
+                <ScalarProperty Name="subject_id" ColumnName="subject_id" />
+                <ScalarProperty Name="subject1" ColumnName="subject" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="upload_file">
+            <EntityTypeMapping TypeName="tutionclassmanagementModel.upload_file">
+              <MappingFragment StoreEntitySet="upload_file">
+                <ScalarProperty Name="file_id" ColumnName="file_id" />
+                <ScalarProperty Name="file_name" ColumnName="file_name" />
+                <ScalarProperty Name="upload_date" ColumnName="upload_date" />
+                <ScalarProperty Name="file_path" ColumnName="file_path" />
+                <ScalarProperty Name="subject" ColumnName="subject" />
+                <ScalarProperty Name="grade" ColumnName="grade" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="upload_file_teacher">
+            <EntityTypeMapping TypeName="tutionclassmanagementModel.upload_file_teacher">
+              <MappingFragment StoreEntitySet="upload_file_teacher">
+                <ScalarProperty Name="file_id" ColumnName="file_id" />
+                <ScalarProperty Name="teacher_id" ColumnName="teacher_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="teachers">
+            <EntityTypeMapping TypeName="tutionclassmanagementModel.teacher">
+              <MappingFragment StoreEntitySet="teacher">
+                <ScalarProperty Name="teacher_name" ColumnName="teacher_name" />
+                <ScalarProperty Name="teacher_id" ColumnName="teacher_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="teacher_grade">
+            <EntityTypeMapping TypeName="tutionclassmanagementModel.teacher_grade">
+              <MappingFragment StoreEntitySet="teacher_grade">
+                <ScalarProperty Name="grade" ColumnName="grade" />
+                <ScalarProperty Name="teacher_id" ColumnName="teacher_id" />
+                <ScalarProperty Name="grade_id" ColumnName="grade_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="teacher_subject">
+            <EntityTypeMapping TypeName="tutionclassmanagementModel.teacher_subject">
+              <MappingFragment StoreEntitySet="teacher_subject">
+                <ScalarProperty Name="teacher_id" ColumnName="teacher_id" />
+                <ScalarProperty Name="subject_id" ColumnName="subject_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
