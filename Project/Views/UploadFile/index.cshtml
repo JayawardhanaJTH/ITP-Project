@@ -1,31 +1,40 @@
-﻿@model Project.Models.TeacherRel
+﻿@*@@model Project.Models.TeacherRel
 @{
     ViewBag.Title = "Index";
 }
 
 <h2>Upload Files</h2>
 
-@*select teacher name by the list, when select the name subject and grade will show according to the teacher*@
-
-@if(ViewBag.teachersList != null)
+@using (Ajax.BeginForm("Index", "UploadFile", new AjaxOptions() { HttpMethod = "Post" }, new { enctype = "multipart/form-data" }))
 {
-    @Html.DropDownListFor(m =>m.teacher_id,ViewBag.teachersList as SelectList,"-- Select Teacher --", new { @class = "form-control" })
-}
-    @Html.DropDownListFor(m => m.subject_id, new SelectList(""), "-- Select Subject --",new {@class = "form-control" })
-    @Html.DropDownListFor(m => m.grade_id, new SelectList(""), "-- Select Grade --", new { @class = "form-control" })
+    @*select teacher name by the list, when select the name subject and grade will show according to the teacher
 
-    @using(Ajax.BeginForm("Index", "UploadFile",new AjaxOptions() { HttpMethod = "Post" }, new { enctype = "multipart/form-data"}))
+    if(ViewBag.teachersList != null)
     {
-        @Html.AntiForgeryToken()
-        <input type="file" name="files" id="ful" />
-        <input type="submit" value="Upload File" />
+        @Html.DropDownListFor(m =>m.teacher_id,ViewBag.teachersList as SelectList,"-- Select Teacher --", new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.teacher_id, "", new { @class="text-danger"})
     }
+    
+    @Html.DropDownListFor(m => m.subject_id, new SelectList(""), "-- Select Subject --",new {@class = "form-control" })
+    @Html.ValidationMessageFor(m => m.subject_id, "", new { @class = "text-danger"})
 
-@* Progress bar for upload files *@
+    @Html.DropDownListFor(m => m.grade_id, new SelectList(""), "-- Select Grade --", new { @class = "form-control" })
+    @Html.ValidationMessageFor(m => m.grade_id, "", new { @class = "text-danger" })
+
+        @Html.AntiForgeryToken()
+    <div class="file-upload-wrapper">
+        <input type="file" name="files" id="ful" class="file-upload" data-height="500">
+        <input type="submit" value="Upload File" />
+    </div>
+}
+
+@* Progress bar for upload files
 <div class="progress">
-    <div class="progress-bar">0%</div>
+    <div class="progress-bar progress-bar-striped bg-success">0%</div>
 </div>
-<div id="status"></div>
+<div >
+   @ViewBag.FileMessage
+</div>
 <style>
     .progress{
         position:relative;
@@ -37,23 +46,16 @@
     .progress-bar{
         width:0px;
         height:80px;
-        background-color:#57b365;
     }
 </style>
 
 @section scripts{
 
-<script src="https://code.jquery.com/jquery-3.4.1.min.js"
-        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
-        crossorigin="anonymous"></script>
-<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
-        integrity="sha256-pasqAKBDmFT4eHoN2ndd6lN370kFiGUFyTiUHWhU7k8="
-        crossorigin="anonymous"></script>
-
-<script src="~/Scripts/jquery-1.4.4.min.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
 <script src="http://malsup.github.com/jquery.form.js"></script>
 
-@*when detect a change on teacher drop down list fire this script code and set subject and grade according it.*@
+@*when detect a change on teacher drop down list fire this script code and set subject and grade according it.
 <script>
     $(document).ready(function () {
         //take student list
@@ -115,12 +117,14 @@
                     percent.html(percentValue);
                     $('#ful').val('');
                     alert(d);
-                },
-                complete: function (xhr) {
-                    status.html(xhr.responseText);
-
                 }
+                //complete: function (xhr) {
+                //    status.html(xhr.responseText);
+
+                //}
             });
         })();
     </script>
-    }
+
+    
+    }*@

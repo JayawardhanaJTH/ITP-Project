@@ -14,6 +14,7 @@ namespace Project.Controllers
         // GET: UploadFile
         public ActionResult Index()
         {
+            
             ViewBag.teachersList = new SelectList(GetteachersList(), "teacher_id", "teacher_name");
             return View();
         }
@@ -53,34 +54,65 @@ namespace Project.Controllers
         }
 
         [HttpPost]
-        public ActionResult Index(IEnumerable<HttpPostedFileBase> files)
+        public ActionResult Index(IEnumerable<HttpPostedFileBase> files,TeacherRel model) 
         {
             dbModels db = new dbModels();
             upload_file log = new upload_file();
-
+            upload_file_teacher log2 = new upload_file_teacher();
             
 
             int count = 0;
-            if(files != null)
+            if (!ModelState.IsValid)
             {
-                foreach (var file in files)
+                return View();
+            }
+            else
+            {
+                if (files != null)
                 {
-                    if (file != null && file.ContentLength > 0)
+                    foreach (var file in files)
                     {
-                        var fileName = file.FileName;
-                        var path = Path.Combine(Server.MapPath("~/UploadedFiles"), fileName);
-                        file.SaveAs(path);
+                        if (file != null && file.ContentLength > 0)
+                        {
+                            var fileName = file.FileName;
+                            var path = Path.Combine(Server.MapPath("~/UploadedFiles"), fileName);
+                            file.SaveAs(path);
 
-                        log.file_name = fileName;
-                        log.file_path = path;
-                        log.upload_date = DateTime.Now;
-                        log.grade = "";
-                        log.subject = "";
+                            log.file_name = fileName;
+                            log.file_path = path;
+                            log.upload_date = DateTime.Now;
 
-                        db.upload_file.Add(log);
-                        db.SaveChanges();
+                            int gradeid = model.grade_id;
+                            int subjectid = model.subject_id;
 
-                       count++;
+
+                            var grades = db.grades.Where(u => u.grade_id == gradeid)
+                                                             .Select(u => new
+                                                             {
+                                                                 grade = u.grade1
+                                                             }).Single();
+
+                            var subjects = db.subjects.Where(u => u.subject_id == subjectid)
+                                                            .Select(u => new
+                                                            {
+                                                                subject = u.subject1
+                                                            }).Single();
+
+                            log.grade = grades.grade;
+                            log.subject = subjects.subject;
+
+                            db.upload_file.Add(log);
+                            db.SaveChanges();
+
+                            int teacherid = model.teacher_id;
+
+                            log2.teacher_id = teacherid;
+
+                            db.upload_file_teacher.Add(log2);
+                            db.SaveChanges();
+
+                            count++;
+                        }
                     }
                 }
             }
