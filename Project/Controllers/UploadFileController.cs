@@ -14,7 +14,7 @@ namespace Project.Controllers
         // GET: UploadFile
         public ActionResult Index()
         {
-            
+            ViewBag.FileMessage = "Select file you want to upload";
             ViewBag.teachersList = new SelectList(GetteachersList(), "teacher_id", "teacher_name");
             return View();
         }
@@ -54,7 +54,7 @@ namespace Project.Controllers
         }
 
         [HttpPost]
-        public ActionResult Index(IEnumerable<HttpPostedFileBase> files,TeacherRel model) 
+        public ActionResult Index(IEnumerable<HttpPostedFileBase> files,TeacherRel model, String message) 
         {
             dbModels db = new dbModels();
             upload_file log = new upload_file();
@@ -115,12 +115,22 @@ namespace Project.Controllers
                         }
                     }
                 }
+                return View(ViewList());
             }
 
-            ViewBag.FileMessage = "Successfully "  + count+ " file(s) uploaded";
-
-            return View();
+            
         }
+
+        public ActionResult ViewList()
+        {
+            dbModels db = new dbModels();
+
+            List<upload_file> files = db.upload_file.ToList();
+
+            return View(files);
+
+        }
+       
 
         public FileResult DownloadFile(string fileName)
         {

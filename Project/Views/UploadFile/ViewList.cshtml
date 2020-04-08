@@ -1,0 +1,29 @@
+﻿@model IEnumerable<Project.Models.upload_file>
+    @{
+        ViewBag.Title = "ViewList";
+    }
+
+    <h2>ViewList</h2>
+
+    <table class=" table table-bordered table-striped">
+
+        <tr>
+            <td>File ID</td>
+            <td>File Name</td>
+            <td>Upload Date</td>
+            <td>Subject</td>
+            <td>Grade</td>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.file_id</td>
+                <td>@item.file_name</td>
+                <td>@item.upload_date</td>
+                <td>@item.subject</td>
+                <td>@item.grade</td>
+            </tr>
+        }
+    </table>
+
