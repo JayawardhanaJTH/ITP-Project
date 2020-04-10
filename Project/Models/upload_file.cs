@@ -11,14 +11,24 @@ namespace Project.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel;
+
     public partial class upload_file
     {
+        [DisplayName("File ID")]
         public int file_id { get; set; }
+        [DisplayName("File Name")]
         public string file_name { get; set; }
+        [DisplayName("Upload Date")]
         public System.DateTime upload_date { get; set; }
+        [DisplayName("File Path")]
         public string file_path { get; set; }
+        [DisplayName("Subject")]
         public string subject { get; set; }
+        [DisplayName("Grade")]
         public string grade { get; set; }
+        public string teacher_id { get; set; }
+        public string subject_id { get; set; }
+        public string grade_id { get; set; }
     }
 }

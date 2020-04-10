@@ -1,5 +1,5 @@
 ﻿@model IEnumerable<Project.Models.upload_file>
-    @using Project.Models
+   
     @{
         ViewBag.Title = "Uploaded Files";
     }
@@ -10,36 +10,32 @@
     <table class=" table table-bordered table-striped table-responsive table-hover">
 
         <tr>
-            <td>File ID</td>
-            <td>File Name</td>
-            <td>Upload Date</td>
-            <td>Subject</td>
-            <td>Grade</td>
+            <th>@Html.DisplayNameFor(model=> model.file_id)</th>
+            <th>@Html.DisplayNameFor(model=> model.file_name)</th>
+            <th>@Html.DisplayNameFor(model => model.upload_date)</th>
+            <th>@Html.DisplayNameFor(model => model.subject)</th>
+            <th>@Html.DisplayNameFor(model => model.grade)</th>
+            <th></th>
         </tr>
 
         @foreach (var item in Model)
         {
             <tr>
-                <td>@item.file_id</td>
-                <td>@item.file_name</td>
-                <td>@item.upload_date</td>
-                <td>@item.subject</td>
-                <td>@item.grade</td>
-                @using (Html.BeginForm("Delete", "UploadFile", FormMethod.Post))
-                {
+                <td>@Html.DisplayFor(file => item.file_id)</td>
+                <td>@Html.DisplayFor(file => item.file_name)</td>
+                <td>@Html.DisplayFor(file => item.upload_date)</td>
+                <td>@Html.DisplayFor(file => item.subject)</td>
+                <td>@Html.DisplayFor(file => item.grade)</td>
+               
 
-                <td>@Html.ActionLink(" ", "Delete", new { id = @item.file_id }, new { @class = "btn btn-danger glyphicon glyphicon-trash" })</td>
-                }
-                @using (Html.BeginForm("Edit", "UploadFile", FormMethod.Post))
-                {
-
-                <td>@Html.ActionLink(" ", "Edit", new { id = @item.file_id }, new { @class = "btn btn-success glyphicon glyphicon-edit" })</td>
-                }
+                <td>
+                    @Html.ActionLink(" ", "Delete", new { id = item.file_id }, new { @class = "btn btn-danger glyphicon glyphicon-trash" }) 
+                    @Html.ActionLink(" ", "Edit", new { id = item.file_id }, new { @class = "btn btn-success glyphicon glyphicon-edit" })
+                </td>
+                
                 
 
 
             </tr>
         }
     </table>
-
-

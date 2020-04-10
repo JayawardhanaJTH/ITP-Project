@@ -5,6 +5,8 @@ using System.Web;
 using System.Web.Mvc;
 using Project.Models;
 using System.IO;
+using System.Net;
+using System.Data.Entity;
 
 namespace Project.Controllers
 {
@@ -152,13 +154,63 @@ namespace Project.Controllers
             return files;
         }
 
+        public ActionResult Delete(int? id)
+        {
+            if(id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            dbModels db = new dbModels();
+            upload_file file = db.upload_file.Find(id);
+
+            if(file == null)
+            {
+                return HttpNotFound();
+            }
+            return View(file);
+            
+        }
+
         [HttpPost]
-        public ActionResult Delete(int id)
+        [ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteSucces(int id)
         {
             dbModels db = new dbModels();
-            upload_file file =  db.upload_file.Find(id);
+            upload_file file = db.upload_file.Find(id);
             db.upload_file.Remove(file);
-            return View("ViewFileList");
+            db.SaveChanges();
+
+            return RedirectToAction("ViewList");
+        }
+
+        public ActionResult Edit(int? id)
+        {
+            dbModels db = new dbModels();
+            upload_file file = db.upload_file.Find(id);
+
+            ViewBag.teachersList = new SelectList(GetteachersList(), "teacher_id", "teacher_name");
+
+            return View(file);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ActionName("Edit")]
+        public ActionResult EditSucces(int id,upload_file model)
+        {
+            dbModels db = new dbModels();
+
+            upload_file file = db.upload_file.Find(id);
+
+            file.file_name = model.file_name;
+            file.grade = model.grade;
+            file.subject = model.subject;
+
+            db.Entry(file).State = EntityState.Modified;
+            db.SaveChanges();
+
+            return RedirectToAction("ViewList");
         }
 
     }

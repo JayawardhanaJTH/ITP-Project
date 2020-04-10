@@ -1,0 +1,62 @@
+﻿@model Project.Models.upload_file
+
+@{
+    ViewBag.Title = "Delete";
+}
+<h2 class="text-center">Selected file details</h2>
+
+<div class="table-bordered form-horizontal" style="border:double red">
+    <div class="text-info " style="font-size:20px; margin-left:50px;">
+        <div class="form-group">
+            @Html.LabelFor(model => model.file_name,  new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DisplayFor(model => model.file_name, new {   @class = "form-control"  })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.file_path,  new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DisplayFor(model => model.file_path, new {  @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.subject, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DisplayFor(model => model.subject, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.grade,  new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DisplayFor(model => model.grade, new {  @class = "form-control" })
+            </div>
+        </div>
+
+    </div>
+</div>
+<div style="margin-top:50px;">
+    <button class=" btn btn-primary" data-toggle="modal" data-target="#delete">Delete</button>
+</div>
+
+<div class=" modal fade" id="delete" aria-hidden="true" tabindex="-1" role="dialog">
+    <div class="modal-dialog ">
+        <div class=" modal-content">
+            <div class="modal-header ">
+                <h3 class=" modal-title text-center">Do you want delete this File</h3>
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-danger text-center glyphicon glyphicon-trash" > <strong>Delete</strong> </button>
+
+                    </div>
+                }
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+
+
