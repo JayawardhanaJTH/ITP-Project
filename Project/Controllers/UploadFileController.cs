@@ -115,7 +115,7 @@ namespace Project.Controllers
                         }
                     }
                 }
-                return View(ViewList());
+                return RedirectToAction("ViewList");
             }
 
             
@@ -152,7 +152,14 @@ namespace Project.Controllers
             return files;
         }
 
-
+        [HttpPost]
+        public ActionResult Delete(int id)
+        {
+            dbModels db = new dbModels();
+            upload_file file =  db.upload_file.Find(id);
+            db.upload_file.Remove(file);
+            return View("ViewFileList");
+        }
 
     }
 }

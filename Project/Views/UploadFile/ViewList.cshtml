@@ -1,11 +1,13 @@
 ﻿@model IEnumerable<Project.Models.upload_file>
+    @using Project.Models
     @{
-        ViewBag.Title = "ViewList";
+        ViewBag.Title = "Uploaded Files";
     }
 
-    <h2>ViewList</h2>
+    <h2 class="text-center">Uploaded Files</h2>
 
-    <table class=" table table-bordered table-striped">
+
+    <table class=" table table-bordered table-striped table-responsive table-hover">
 
         <tr>
             <td>File ID</td>
@@ -23,7 +25,21 @@
                 <td>@item.upload_date</td>
                 <td>@item.subject</td>
                 <td>@item.grade</td>
+                @using (Html.BeginForm("Delete", "UploadFile", FormMethod.Post))
+                {
+
+                <td>@Html.ActionLink(" ", "Delete", new { id = @item.file_id }, new { @class = "btn btn-danger glyphicon glyphicon-trash" })</td>
+                }
+                @using (Html.BeginForm("Edit", "UploadFile", FormMethod.Post))
+                {
+
+                <td>@Html.ActionLink(" ", "Edit", new { id = @item.file_id }, new { @class = "btn btn-success glyphicon glyphicon-edit" })</td>
+                }
+                
+
+
             </tr>
         }
     </table>
+
 
