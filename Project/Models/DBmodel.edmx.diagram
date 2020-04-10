@@ -8,10 +8,10 @@
         <EntityTypeShape EntityType="tutionclassmanagementModel.grade" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="tutionclassmanagementModel.subject" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="tutionclassmanagementModel.upload_file" Width="1.5" PointX="0.75" PointY="3.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="tutionclassmanagementModel.upload_file_teacher" Width="1.5" PointX="2.75" PointY="3.75" IsExpanded="true" />
         <EntityTypeShape EntityType="tutionclassmanagementModel.teacher" Width="1.5" PointX="4.625" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="tutionclassmanagementModel.teacher_grade" Width="1.5" PointX="5.75" PointY="3.75" />
         <EntityTypeShape EntityType="tutionclassmanagementModel.teacher_subject" Width="1.5" PointX="0.75" PointY="6.75" />
+        <EntityTypeShape EntityType="tutionclassmanagementModel.upload_file_teacher" Width="1.5" PointX="3.125" PointY="4" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

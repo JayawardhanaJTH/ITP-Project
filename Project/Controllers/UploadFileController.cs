@@ -204,10 +204,36 @@ namespace Project.Controllers
             upload_file file = db.upload_file.Find(id);
 
             file.file_name = model.file_name;
-            file.grade = model.grade;
-            file.subject = model.subject;
+
+            int gradeID = model.grade_id;
+            int subjectID = model.subject_id;
+
+            var grade = db.grades.Where(m => m.grade_id == gradeID)
+                            .Select(u => new
+                            {
+                                grade = u.grade1
+                            }).Single();
+
+            var subject = db.subjects.Where(m => m.subject_id == subjectID)
+                               .Select(u => new
+                               {
+                                   subject = u.subject1
+                               }).Single(); 
+               
+            file.grade = grade.grade;
+            file.subject = subject.subject ;
 
             db.Entry(file).State = EntityState.Modified;
+            db.SaveChanges();
+
+
+            int fileID = model.file_id;
+            
+            upload_file_teacher teacher = db.upload_file_teacher.Find(fileID);
+
+            teacher.teacher_id = model.teacher_id;
+
+            db.Entry(teacher).State = EntityState.Modified;
             db.SaveChanges();
 
             return RedirectToAction("ViewList");

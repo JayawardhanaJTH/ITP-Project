@@ -27,8 +27,8 @@ namespace Project.Models
         public string subject { get; set; }
         [DisplayName("Grade")]
         public string grade { get; set; }
-        public string teacher_id { get; set; }
-        public string subject_id { get; set; }
-        public string grade_id { get; set; }
+        public int teacher_id { get; set; }
+        public int subject_id { get; set; }
+        public int grade_id { get; set; }
     }
 }

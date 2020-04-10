@@ -57,9 +57,8 @@
         <EntityType Name="upload_file_teacher">
           <Key>
             <PropertyRef Name="file_id" />
-            <PropertyRef Name="teacher_id" />
           </Key>
-          <Property Name="file_id" Type="int" Nullable="false" />
+          <Property Name="file_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="teacher_id" Type="int" Nullable="false" />
         </EntityType>
         <EntityContainer Name="tutionclassmanagementModelStoreContainer">
@@ -100,22 +99,14 @@
           <Property Name="subject" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="grade" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
         </EntityType>
-        <EntityType Name="upload_file_teacher">
-          <Key>
-            <PropertyRef Name="file_id" />
-            <PropertyRef Name="teacher_id" />
-          </Key>
-          <Property Name="file_id" Type="Int32" Nullable="false" />
-          <Property Name="teacher_id" Type="Int32" Nullable="false" />
-        </EntityType>
         <EntityContainer Name="dbModels" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="grades" EntityType="Self.grade" />
           <EntitySet Name="subjects" EntityType="Self.subject" />
           <EntitySet Name="upload_file" EntityType="Self.upload_file" />
-          <EntitySet Name="upload_file_teacher" EntityType="Self.upload_file_teacher" />
           <EntitySet Name="teachers" EntityType="tutionclassmanagementModel.teacher" />
           <EntitySet Name="teacher_grade" EntityType="tutionclassmanagementModel.teacher_grade" />
           <EntitySet Name="teacher_subject" EntityType="tutionclassmanagementModel.teacher_subject" />
+          <EntitySet Name="upload_file_teacher" EntityType="tutionclassmanagementModel.upload_file_teacher" />
         </EntityContainer>
         <EntityType Name="teacher">
           <Key>
@@ -139,6 +130,13 @@
             <PropertyRef Name="teacher_id" />
           </Key>
           <Property Name="subject_id" Type="Int32" Nullable="false" />
+          <Property Name="teacher_id" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="upload_file_teacher">
+          <Key>
+            <PropertyRef Name="file_id" />
+          </Key>
+          <Property Name="file_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="teacher_id" Type="Int32" Nullable="false" />
         </EntityType>
       </Schema>
@@ -175,14 +173,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="upload_file_teacher">
-            <EntityTypeMapping TypeName="tutionclassmanagementModel.upload_file_teacher">
-              <MappingFragment StoreEntitySet="upload_file_teacher">
-                <ScalarProperty Name="file_id" ColumnName="file_id" />
-                <ScalarProperty Name="teacher_id" ColumnName="teacher_id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="teachers">
             <EntityTypeMapping TypeName="tutionclassmanagementModel.teacher">
               <MappingFragment StoreEntitySet="teacher">
@@ -205,6 +195,14 @@
               <MappingFragment StoreEntitySet="teacher_subject">
                 <ScalarProperty Name="teacher_id" ColumnName="teacher_id" />
                 <ScalarProperty Name="subject_id" ColumnName="subject_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="upload_file_teacher">
+            <EntityTypeMapping TypeName="tutionclassmanagementModel.upload_file_teacher">
+              <MappingFragment StoreEntitySet="upload_file_teacher">
+                <ScalarProperty Name="teacher_id" ColumnName="teacher_id" />
+                <ScalarProperty Name="file_id" ColumnName="file_id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
