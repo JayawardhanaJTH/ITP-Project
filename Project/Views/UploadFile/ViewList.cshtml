@@ -3,11 +3,12 @@
     @{
         ViewBag.Title = "Uploaded Files";
     }
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <span><br /></span>
+<h2 class="text-center">Uploaded Files</h2>
 
-    <h2 class="text-center">Uploaded Files</h2>
 
-
-    <table class=" table table-bordered table-striped table-responsive table-hover">
+    <table class=" table table-bordered table-striped table-responsive-sm table-hover">
 
         <tr>
             <th>@Html.DisplayNameFor(model=> model.file_id)</th>
@@ -15,7 +16,7 @@
             <th>@Html.DisplayNameFor(model => model.upload_date)</th>
             <th>@Html.DisplayNameFor(model => model.subject)</th>
             <th>@Html.DisplayNameFor(model => model.grade)</th>
-            <th></th>
+            
         </tr>
 
         @foreach (var item in Model)
@@ -29,8 +30,9 @@
                
 
                 <td>
-                    @Html.ActionLink(" ", "Delete", new { id = item.file_id }, new { @class = "btn btn-danger glyphicon glyphicon-trash" }) 
-                    @Html.ActionLink(" ", "Edit", new { id = item.file_id }, new { @class = "btn btn-success glyphicon glyphicon-edit" })
+                    @Html.ActionLink(" ", "Delete", new { id = item.file_id }, new { @class = "btn btn-danger fas fa-trash-alt" }) 
+                    @Html.ActionLink(" ", "Edit", new { id = item.file_id }, new { @class = "btn btn-success far fa-edit" })
+                    
                 </td>
                 
                 

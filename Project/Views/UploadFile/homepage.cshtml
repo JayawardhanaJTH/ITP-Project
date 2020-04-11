@@ -1,0 +1,373 @@
+<style>
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #333;
+}
+
+li {
+  float: left;
+}
+
+li a {
+  display: block;
+  color: white;
+  font-size:20px;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+li a:hover {
+  background-color:orange;
+}
+
+input[type=text]{
+  font-size:18px;
+  background-color:#333;
+  resize: vertical;
+  font-family: italic, Helvetica, sans-serif;
+  font-color:white;
+
+ }
+input[type=submit]:hover {
+  cursor:pointer;
+  background-color:#ffc107;
+  color:#000;
+}
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1; 
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888; 
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555; 
+}
+
+.rectangle {
+  height: 125px;
+  width: 1000px;
+  background:url(../images/not.jpg);
+  background-size: 100% ;
+  background-repeat:no-repeat,no-repeat;
+  font-family:Arial;
+  color:white;
+  font-size:20px;
+  margin-left:10px;
+ 
+  
+}
+
+.rectangle1 {
+  position:static;
+  bottom: 80px;
+  right: 20px;
+  height:390px;
+  width: 300px;
+  background-color: #FCF3CF ;
+  font-family:Arial;
+  color:Black;
+  font-size:35px;
+  position: absolute;
+  bottom:-255px;
+  text-align:center;
+  font-family: "Times New Roman", Times, serif;
+  font-style:italic;
+}
+.rectangle2 {
+  position:static;
+  bottom: 80px;
+  right: 10px;
+  height:282px;
+  width: 418px;
+  font-family:Arial;
+  background:url(../images/img.jpg);
+  background-size: 100% ;
+  background-repeat:no-repeat,no-repeat;
+  position: absolute;
+  bottom:182px;
+  
+}
+.rectangle3 {
+  position:static;
+  bottom: 80px;
+  left: 10px;
+  height:282px;
+  width: 418px;
+  font-family:Arial;
+  background:url(../images/img.jpg);
+  background-size: 100% ;
+  background-repeat:no-repeat,no-repeat;
+  position: absolute;
+  bottom:182px;
+  
+}
+table {
+  border-collapse: collapse;
+  width:1000px;
+  margin-left:10px;
+  
+  
+}
+td {
+  font-family: "Times New Roman", Times, serif;
+  border: 0px solid #dddddd;
+  text-align: left;
+  padding: 15px;
+  color:#D68910;
+  font-size:20px;
+}
+th {
+  font-style:italic;
+  border: 1px solid #FADBD8;
+  background-color:#FADBD8;
+  text-align: left;
+  padding:25px;
+  color:black;
+  font-family: "Times New Roman", Times, serif;
+  font-size:25px;
+  -webkit-animation: mymove 10s infinite;
+  animation: mymove 5s infinite;
+}
+
+tr:nth-child(even) :hover {
+  background-color:#FFD794;
+}
+tr:nth-child(odd) :hover {
+  background-color:#FFD794;
+}
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+tr:nth-child(odd) {
+  background-color: #FBFCFC ;
+}
+.closebtn {
+  margin-left: 15px;
+  color:#1B2631;
+  font-weight: bold;
+  float: right;
+  font-size: 22px;
+  line-height: 28px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.closebtn:hover {
+  color:red;
+}
+box-sizing: border-box;}
+body {font-family: Verdana, sans-serif;}
+.mySlides {display: none;}
+img {vertical-align: middle;}
+
+/* Slideshow container */
+.slideshow-container {
+  max-width: 500px;
+  position: relative;
+  margin: auto;
+  width:100%;
+}
+
+
+/* The dots/bullets/indicators */
+.dot {
+  height: 15px;
+  width: 15px;
+  margin: 0 2px;
+  background-color: #bbb;
+  border-radius: 50%;
+  display: inline-block;
+  transition: background-color 0.6s ease;
+}
+
+.active {
+  background-color: #717171;
+}
+
+/* Fading animation */
+.fade {
+  -webkit-animation-name: fade;
+  -webkit-animation-duration: 1.5s;
+  animation-name: fade;
+  animation-duration: 1.5s;
+}
+
+
+
+
+.footer{
+	width:100%;
+	height:20px;
+	position:bottom;
+	top:100%;
+}
+.main2{
+	
+	background:black;
+	border:none;
+	font-family:Arial;
+	padding-left:1%;
+	line-height:6.5em;
+	
+	
+}
+/*footer text style*/
+.p1{
+	font-family:Arial;
+	color:white;
+	font-size:12px;
+	margin-left:10px;
+}
+</style>
+	
+
+<body bgcolor="white">
+
+<image src = "../images/l.png"width ="135px" height ="135px">
+<image src = "../images/prof.jpg"width ="135px" height ="135px" style="float:right">
+  <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+    <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+		
+      <li class="nav-item active">
+        <a class="nav-link" href="#">Home &nbsp &nbsp </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">My Classes &nbsp &nbsp</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link disabled" href="#">Payments &nbsp &nbsp</a>
+      </li>
+	  <li class="nav-item">
+        <a class="nav-link disabled" href="#">Timetable &nbsp &nbsp </a>
+      </li>
+	  <div class="search-container">
+	  <li style="float:right">
+	  <form>
+      <input type="text" placeholder="           Search.."style = "font-style: italic" name="search" >
+      <button class="searchbar" type="submit"><image src = "../images/search.png"width ="25px" height ="25px";></button>
+	  </li>
+    </form>
+    </ul>
+    
+  </div>
+</nav>
+
+
+
+
+<div class="slideshow-container">
+
+<div class="mySlides fade">
+  
+  <img src="../images/aaa.jpg" style="width:100%">
+  
+</div>
+
+<div class="mySlides fade">
+  
+  <img src="../images/111.jpg" style="width:100%">
+ 
+</div>
+
+<div class="mySlides fade">
+  
+  <img src="../images/bbb.jpg" style="width:100%">
+  
+</div>
+
+</div>
+<br>
+
+<div style="text-align:center">
+  <span class="dot"></span> 
+  <span class="dot"></span> 
+  <span class="dot"></span> 
+</div>
+
+
+<div class="rectangle"> <br> &nbsp &nbsp Notices <br>&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
+			<image src = "../images/ass.jpg" style="width:25px;height:25px; " > &nbsp STAFF  &nbsp &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
+
+			<image src = "../images/clss.png"style="width:25px;height:25px;" > &nbsp CLASSES &nbsp &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
+			<image src = "../images/ads.png" style="width:25px;height:25px;"> &nbsp ADMIN
+			</div>
+			<br>
+<div class="rectangle3"></div>
+<div class="rectangle2"></div>
+<div class="rectangle1"> <br>Help Desk
+<br> <br> <image src = "../images/hd.jpg"style="width:250px;height:250px;" > 
+ </div>		
+<table>
+  <tr>
+    <th><image src = "../images/bell.png" style="width:25px;height:25px; " > &nbsp Latest Notices...</th> 	
+	</tr>
+	<tr>
+    <td><span class="closebtn">&times;</span> Alfreds Futterkiste</span>  </td>
+	</tr>
+	<tr>
+    <td><span class="closebtn">&times;</span> Alfreds Futterkiste</span>  </td>
+	</tr>
+	<tr>
+    <td><span class="closebtn">&times;</span> Alfreds Futterkiste</span>  </td>
+	</tr>
+</table>
+
+<br><br><br>
+<div class = "footer">
+		<footer class = "main2">
+			<p class = "p1">Copyrights 2020 brainfuse.All Rights Reserved..<br>
+			 https://www.brainfuse.lk   &nbsp &nbsp &nbsp &nbsp &nbsp  &nbsp  info@brainfuse.lk
+			 <image src = "../images/l.png"width ="95px" height ="95px" style="float:right; margin-right :10px">
+			 </p>
+			
+			
+		</footer>
+	</div>
+<script>
+var slideIndex = 0;
+showSlides();
+
+function showSlides() {
+  var i;
+  var slides = document.getElementsByClassName("mySlides");
+  var dots = document.getElementsByClassName("dot");
+  for (i = 0; i < slides.length; i++) {
+    slides[i].style.display = "none";  
+  }
+  slideIndex++;
+  if (slideIndex > slides.length) {slideIndex = 1}    
+  for (i = 0; i < dots.length; i++) {
+    dots[i].className = dots[i].className.replace(" active", "");
+  }
+  slides[slideIndex-1].style.display = "block";  
+  dots[slideIndex-1].className += " active";
+  setTimeout(showSlides, 5000); // Change image every 2 seconds
+}
+var close = document.getElementsByClassName("closebtn");
+var i;
+
+for (i = 0; i < close.length; i++) {
+  close[i].onclick = function(){
+    var div = this.parentElement;
+    div.style.opacity = "0";
+    setTimeout(function(){ div.style.display = "none"; }, 600);
+  }
+}
+</script>
+
+</body>
+</html>

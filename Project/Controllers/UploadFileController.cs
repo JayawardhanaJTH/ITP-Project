@@ -268,5 +268,14 @@ namespace Project.Controllers
             db.SaveChanges();
         }
 
+        //public ActionResult HomePage()
+        //{
+        //    return View();
+        //}
+        public ActionResult homepage()
+        {
+            return View();
+        }
+
     }
 }

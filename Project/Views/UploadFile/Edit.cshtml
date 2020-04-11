@@ -4,7 +4,7 @@
 @{
     ViewBag.Title = "Edit";
 }
-
+<span><br /></span>
 <h2>Edit</h2>
 
 
@@ -30,7 +30,7 @@
             if (ViewBag.teachersList != null)
             {
 
-                 @Html.Label("Choose Teacher Name", new { @class = "col-md-2 control-label" })
+                 @Html.Label("Choose Teacher Name", new { @class = "col-sm-2 control-label" })
             <div class=" col-sm-10">
                 @Html.DropDownListFor(m => m.teacher_id, ViewBag.teachersList as SelectList, "-- Select Teacher --", new { @class = "form-control" })
                 @Html.ValidationMessageFor(m => m.teacher_id, "", new { @class = "text-danger" })
