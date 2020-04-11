@@ -117,10 +117,10 @@ namespace Project.Controllers
                         }
                     }
                 }
-                return RedirectToAction("ViewList");
+                
             }
 
-            
+            return RedirectToAction("ViewList");
         }
 
         public ActionResult ViewList()
@@ -139,20 +139,7 @@ namespace Project.Controllers
             var filePath = "~/UploadedFiles/" + fileName;
             return File(filePath, "application/force- download", Path.GetFileName(filePath));
         }
-
-        public List<string> GetFileList()
-        {
-            var directory = new DirectoryInfo(Server.MapPath("~/UploadedFiles"));
-            FileInfo[] fileNames = directory.GetFiles("*.*");
-
-            List<String> files = new List<string>();
-
-            foreach (var item in fileNames)
-            {
-                files.Add(item.Name);
-            }
-            return files;
-        }
+       
 
         public ActionResult Delete(int? id)
         {
@@ -199,44 +186,86 @@ namespace Project.Controllers
         [ActionName("Edit")]
         public ActionResult EditSucces(int id,upload_file model)
         {
+            if (ModelState.IsValid)
+            {
+                
+
+                dbModels db = new dbModels();
+
+                upload_file file = db.upload_file.Find(id);
+
+                string oldName = file.file_name;
+
+                file.file_name = model.file_name;
+
+                int gradeID = model.grade_id;
+                int subjectID = model.subject_id;
+
+                var grade = db.grades.Where(m => m.grade_id == gradeID)
+                                .Select(u => new
+                                {
+                                    grade = u.grade1
+                                }).Single();
+
+                var subject = db.subjects.Where(m => m.subject_id == subjectID)
+                                   .Select(u => new
+                                   {
+                                       subject = u.subject1
+                                   }).Single(); 
+               
+                file.grade = grade.grade;
+                file.subject = subject.subject ;
+
+                db.Entry(file).State = EntityState.Modified;
+                db.SaveChanges();
+
+
+                int fileID = model.file_id;
+            
+                upload_file_teacher teacher = db.upload_file_teacher.Find(fileID);
+
+                teacher.teacher_id = model.teacher_id;
+
+                db.Entry(teacher).State = EntityState.Modified;
+                db.SaveChanges();
+
+                ChangeFileName(fileID, model.file_name,oldName);
+
+                return RedirectToAction("ViewList");
+            }
+            else
+            {
+                ViewBag.teachersList = new SelectList(GetteachersList(), "teacher_id", "teacher_name");
+                return View(model);
+            }
+        }
+
+        public void ChangeFileName(int fileID,string fileName, string oldName)
+        {
             dbModels db = new dbModels();
 
-            upload_file file = db.upload_file.Find(id);
+            upload_file file = db.upload_file.Find(fileID);
 
-            file.file_name = model.file_name;
+            
 
-            int gradeID = model.grade_id;
-            int subjectID = model.subject_id;
+            var directory = new DirectoryInfo(Server.MapPath("~/UploadedFiles"));
+            FileInfo[] getFile = directory.GetFiles(oldName+".*");
 
-            var grade = db.grades.Where(m => m.grade_id == gradeID)
-                            .Select(u => new
-                            {
-                                grade = u.grade1
-                            }).Single();
+            //List<String> files = new List<string>();
+            //var path = Path.Combine(Server.MapPath("~/UploadedFiles"), fileName);
 
-            var subject = db.subjects.Where(m => m.subject_id == subjectID)
-                               .Select(u => new
-                               {
-                                   subject = u.subject1
-                               }).Single(); 
-               
-            file.grade = grade.grade;
-            file.subject = subject.subject ;
+            System.IO.File.Move(getFile[0].FullName,directory.FullName+"\\"+fileName);
 
+
+
+
+            string path = file.file_path;
+           
+            path = "D:\\MVC\\Project\\Project\\UploadedFiles\\"+fileName;
+
+            file.file_path = path;
             db.Entry(file).State = EntityState.Modified;
             db.SaveChanges();
-
-
-            int fileID = model.file_id;
-            
-            upload_file_teacher teacher = db.upload_file_teacher.Find(fileID);
-
-            teacher.teacher_id = model.teacher_id;
-
-            db.Entry(teacher).State = EntityState.Modified;
-            db.SaveChanges();
-
-            return RedirectToAction("ViewList");
         }
 
     }
