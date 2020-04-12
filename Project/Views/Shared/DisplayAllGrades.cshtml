@@ -1,0 +1,12 @@
+﻿@model Project.Models.grade
+
+<option value="">-- Select Grade --</option>
+
+@if (ViewBag.allgradeList != null)
+{
+    foreach (var item in ViewBag.allgradeList)
+    {
+        <option value="@item.Value">@item.Text</option>
+    }
+}
+

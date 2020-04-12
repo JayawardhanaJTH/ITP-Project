@@ -1,0 +1,91 @@
+﻿@model Project.Models.TeacherRel
+@{
+    ViewBag.Title = "GetFileList";
+    string SubName = "Subject";
+}
+<span><br /></span>
+<h2>@SubName Page</h2>
+@using (Ajax.BeginForm("GetFiles", "UploadFile", new AjaxOptions() { HttpMethod = "Post" }, new { enctype = "multipart/form-data" }))
+{ 
+    @Html.AntiForgeryToken()
+
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    <div>
+
+            @if (ViewBag.subjectList != null)
+            {
+                <div class="form-group">
+                    @Html.Label("Choose subject Name", new { @class = "col-sm-2 control-label" })
+                    <div class=" col-sm-10">
+                        @Html.DropDownListFor(m => m.subject_id, ViewBag.subjectList as SelectList, "-- Select Subject --", new { @class = "form-control btn-info" })
+                        @Html.ValidationMessageFor(m => m.subject_id, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+              }
+    </div>
+            <span><br /></span>
+            <div class="form-group">
+                @Html.Label("Choose Grade", new { @class = "col-sm-2 control-label" })
+                <div class=" col-sm-10">
+                    @Html.DropDownListFor(m => m.grade_id, new SelectList(""), "-- Select Grade --", new { @class = "form-control btn-info " })
+                    @Html.ValidationMessageFor(m => m.grade_id, "", new { @class = "text-danger" })
+                </div>
+            </div>
+    <div >
+   
+            
+            <input type="submit" value="Show Files"  class = "btn btn-success strong" />
+
+    
+    </div>
+}
+@section scripts
+    {
+
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery-3.4.1.min.js"></script>
+    <script src="http://malsup.github.com/jquery.form.js"></script>
+
+    @*when detect a change on teacher drop down list fire this script code and set subject and grade according it.*@
+    <script>
+    $(document).ready(function () {
+    //take Grade list
+        $("#subject_id").change(function () {
+            var teacherID = $(this).val();
+            debugger
+            $.ajax({
+                type: "post",
+                url: "/UploadFile/GetAllGrades",
+                contentType: "html",
+                success: function (response) {
+                    debugger
+                    $("#grade_id").empty();
+                    $("#grade_id").append(response);
+                }
+            })
+        })
+    })
+    </script>
+
+    <script>
+        $(document).ready(function () {
+        //take Grade list
+            $("#grade_id", "#subject_id").change(function () {
+                var gradeID = $(this).val();
+                debugger
+                $.ajax({
+                    type: "post",
+                    url: "/UploadFile/GetFiles?gradeID="+gradeID+"&subjectID="+subjectID,
+                    contentType: "html",
+                    success: function (response) {
+                        debugger
+                        $("#grade_id").empty();
+                        $("#grade_id").append(response);
+                    }
+                })
+            })
+        })
+    </script>
+
+}

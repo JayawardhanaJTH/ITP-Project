@@ -66,7 +66,8 @@ namespace Project.Controllers
             int count = 0;
             if (!ModelState.IsValid)
             {
-                return View();
+                return new JsonResult { Data = "File not uploaded" };
+                //return View();
             }
             else
             {
@@ -116,11 +117,13 @@ namespace Project.Controllers
                             count++;
                         }
                     }
+                     return new JsonResult { Data = "Successfully file Uploaded" };
                 }
-                
+                else
+                    return new JsonResult { Data = "File not uploaded" };
+
             }
 
-            return RedirectToAction("ViewList");
         }
 
         public ActionResult ViewList()
@@ -132,13 +135,34 @@ namespace Project.Controllers
             return View(files);
 
         }
-       
 
-        public FileResult DownloadFile(string fileName)
+
+        public ActionResult DownloadFile(string fileName)
         {
-            var filePath = "~/UploadedFiles/" + fileName;
-            return File(filePath, "application/force- download", Path.GetFileName(filePath));
+            dbModels db = new dbModels();
+            string filePath = db.upload_file.Where(u=>u.file_name == fileName).ToString();
+            string fullName = "~" + filePath;
+
+            byte[] fileBytes = GetFile(fullName);
+            return File(
+                fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, filePath);
         }
+
+        byte[] GetFile(string s)
+        {
+            System.IO.FileStream fs = System.IO.File.OpenRead(s);
+            byte[] data = new byte[fs.Length];
+            int br = fs.Read(data, 0, data.Length);
+            if (br != fs.Length)
+                throw new System.IO.IOException(s);
+            return data;
+        }
+
+        //public FileResult DownloadFile(string fileName)
+        //{
+        //    var filePath = "~\\UploadedFiles\\" + fileName;
+        //    return File(filePath, "application/force- download", Path.GetFileName(filePath));
+        //}
        
 
         public ActionResult Delete(int? id)
@@ -165,6 +189,17 @@ namespace Project.Controllers
         {
             dbModels db = new dbModels();
             upload_file file = db.upload_file.Find(id);
+           
+
+            upload_file_teacher teacher = db.upload_file_teacher.Find(id);
+            db.upload_file_teacher.Remove(teacher);
+            db.SaveChanges();
+
+            var directory =new DirectoryInfo(Server.MapPath("~/UploadedFiles"));
+            FileInfo[] getFile = directory.GetFiles(file.file_name+".*");
+
+            System.IO.File.Delete(getFile[0].FullName);
+
             db.upload_file.Remove(file);
             db.SaveChanges();
 
@@ -188,8 +223,6 @@ namespace Project.Controllers
         {
             if (ModelState.IsValid)
             {
-                
-
                 dbModels db = new dbModels();
 
                 upload_file file = db.upload_file.Find(id);
@@ -219,7 +252,6 @@ namespace Project.Controllers
                 db.Entry(file).State = EntityState.Modified;
                 db.SaveChanges();
 
-
                 int fileID = model.file_id;
             
                 upload_file_teacher teacher = db.upload_file_teacher.Find(fileID);
@@ -246,8 +278,6 @@ namespace Project.Controllers
 
             upload_file file = db.upload_file.Find(fileID);
 
-            
-
             var directory = new DirectoryInfo(Server.MapPath("~/UploadedFiles"));
             FileInfo[] getFile = directory.GetFiles(oldName+".*");
 
@@ -255,9 +285,6 @@ namespace Project.Controllers
             //var path = Path.Combine(Server.MapPath("~/UploadedFiles"), fileName);
 
             System.IO.File.Move(getFile[0].FullName,directory.FullName+"\\"+fileName);
-
-
-
 
             string path = file.file_path;
            
@@ -268,13 +295,58 @@ namespace Project.Controllers
             db.SaveChanges();
         }
 
-        //public ActionResult HomePage()
-        //{
-        //    return View();
-        //}
         public ActionResult homepage()
         {
             return View();
+        }
+
+        ////////////////////////////////////////////////////////////
+        ////                                                    ////                    
+        ////                   Student Side                     ////
+        ////                                                    ////
+        ////////////////////////////////////////////////////////////
+
+          
+        public ActionResult GetFileList()
+        {
+            dbModels db = new dbModels();
+
+            List<subject> subjects = db.subjects.ToList();
+
+            ViewBag.subjectList =new SelectList(subjects, "subject_id", "subject1");
+
+            return View();
+        }
+
+       
+        public ActionResult GetFiles(TeacherRel model)
+        {
+            dbModels db = new dbModels();
+
+            var grades = db.grades.Where(u => u.grade_id == model.grade_id)
+                                                            .Select(u => new
+                                                            {
+                                                                grade = u.grade1
+                                                            }).Single();
+
+            var subjects = db.subjects.Where(u => u.subject_id == model.subject_id)
+                                            .Select(u => new
+                                            {
+                                                subject = u.subject1
+                                            }).Single();
+
+            List<upload_file> files = db.upload_file.Where(x => x.grade == grades.grade && x.subject == subjects.subject).ToList();
+            return View(files);
+        }
+
+        public ActionResult GetAllGrades()
+        {
+            dbModels db = new dbModels();
+            List<grade> grades = db.grades.ToList();
+
+            ViewBag.allgradeList = new SelectList(grades, "grade_id", "grade1");
+
+            return PartialView("DisplayAllGrades");
         }
 
     }

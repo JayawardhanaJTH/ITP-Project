@@ -68,22 +68,16 @@
                 <li class="nav-item active">
                     <a class="nav-link" href="/UploadFile/homepage">Home</a>
                 </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Login
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="/Student/Create">Student Login</a>
-                        <a class="dropdown-item" href="#">Staf Login</a>
-
-                    </div>
-                </li>
                 <li class="nav-item">
                     @* @Html.ActionLink("Upload", "Index", "UploadFile")*@
                     <a class="nav-link" href="/UploadFile/Index">Upload</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/UploadFile/ViewList">File List</a>
+                    @* @Html.ActionLink("File List", "ViewList", "UploadFile")*@
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/UploadFile/GetFileList">File List Student</a>
                     @* @Html.ActionLink("File List", "ViewList", "UploadFile")*@
                 </li>
                 <li class="nav-item">

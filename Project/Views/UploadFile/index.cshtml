@@ -23,7 +23,7 @@
                 @Html.ValidationMessageFor(m => m.teacher_id, "", new { @class = "text-danger" })
             </div>
         </div>
-    }
+        }
     <span><br /></span>
     <div class="form-group">
         @Html.Label("Choose Subject Name", new { @class = "col-sm-2 control-label" })
@@ -40,7 +40,7 @@
             @Html.ValidationMessageFor(m => m.grade_id, "", new { @class = "text-danger" })
         </div>
     </div>
-        @Html.AntiForgeryToken()
+       
 
         <div class="form-group">
             <br /><br />
@@ -54,7 +54,7 @@
 
 @* Progress bar for upload files*@
 <div class="progress">
-    <div class="progress-bar progress-striped progress-bar-success"><br/>0%</div>
+    <div class="progress-bar progress-bar-striped bg-success"><br/>0%</div>
 </div>
 
 
