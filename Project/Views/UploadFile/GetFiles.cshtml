@@ -45,7 +45,7 @@
                     @Html.DisplayFor(modelItem => item.grade)
                 </td>
                 <td>
-                    @Html.ActionLink("Download", "DownloadFile", new { id = item.file_name })
+                    @Html.ActionLink("Download", "DownloadFile", new { fileName = item.file_name })
                 </td>
             </tr>
         }

@@ -136,34 +136,12 @@ namespace Project.Controllers
 
         }
 
-
-        public ActionResult DownloadFile(string fileName)
+        public FileResult DownloadFile(string fileName)
         {
-            dbModels db = new dbModels();
-            string filePath = db.upload_file.Where(u=>u.file_name == fileName).ToString();
-            string fullName = "~" + filePath;
-
-            byte[] fileBytes = GetFile(fullName);
-            return File(
-                fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, filePath);
+            byte[] fileBytes = System.IO.File.ReadAllBytes(@"D:\MVC\Project\Project\UploadedFiles\"+fileName);
+            return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, fileName);
+        
         }
-
-        byte[] GetFile(string s)
-        {
-            System.IO.FileStream fs = System.IO.File.OpenRead(s);
-            byte[] data = new byte[fs.Length];
-            int br = fs.Read(data, 0, data.Length);
-            if (br != fs.Length)
-                throw new System.IO.IOException(s);
-            return data;
-        }
-
-        //public FileResult DownloadFile(string fileName)
-        //{
-        //    var filePath = "~\\UploadedFiles\\" + fileName;
-        //    return File(filePath, "application/force- download", Path.GetFileName(filePath));
-        //}
-       
 
         public ActionResult Delete(int? id)
         {
