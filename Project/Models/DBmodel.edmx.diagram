@@ -4,14 +4,14 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="eff5d53f5ec5464e95d6f37b0eb8a551" Name="Diagram1">
-        <EntityTypeShape EntityType="tutionclassmanagementModel.grade" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="tutionclassmanagementModel.subject" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="tutionclassmanagementModel.upload_file" Width="1.5" PointX="0.75" PointY="3.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="tutionclassmanagementModel.teacher" Width="1.5" PointX="4.625" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="tutionclassmanagementModel.teacher_grade" Width="1.5" PointX="5.75" PointY="3.75" />
-        <EntityTypeShape EntityType="tutionclassmanagementModel.teacher_subject" Width="1.5" PointX="0.75" PointY="6.75" />
-        <EntityTypeShape EntityType="tutionclassmanagementModel.upload_file_teacher" Width="1.5" PointX="3.125" PointY="4" />
+      <Diagram DiagramId="9862ae1486f5429e9c4e7d17994b4da1" Name="Diagram1">
+        <EntityTypeShape EntityType="SipminiModel.grade" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SipminiModel.subject" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SipminiModel.teacher" Width="1.5" PointX="0.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SipminiModel.teacher_grade" Width="1.5" PointX="2.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SipminiModel.teacher_subject" Width="1.5" PointX="4.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SipminiModel.upload_file" Width="1.5" PointX="4.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SipminiModel.upload_file_teacher" Width="1.5" PointX="6.75" PointY="0.75" IsExpanded="true" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -13,10 +13,10 @@ namespace Project.Models
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class dbModels : DbContext
+    public partial class DBmodel : DbContext
     {
-        public dbModels()
-            : base("name=dbModels")
+        public DBmodel()
+            : base("name=DBmodel")
         {
         }
     
@@ -27,10 +27,10 @@ namespace Project.Models
     
         public virtual DbSet<grade> grades { get; set; }
         public virtual DbSet<subject> subjects { get; set; }
-        public virtual DbSet<upload_file> upload_file { get; set; }
         public virtual DbSet<teacher> teachers { get; set; }
         public virtual DbSet<teacher_grade> teacher_grade { get; set; }
         public virtual DbSet<teacher_subject> teacher_subject { get; set; }
+        public virtual DbSet<upload_file> upload_file { get; set; }
         public virtual DbSet<upload_file_teacher> upload_file_teacher { get; set; }
     }
 }

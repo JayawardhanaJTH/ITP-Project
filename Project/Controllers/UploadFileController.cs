@@ -7,6 +7,7 @@ using Project.Models;
 using System.IO;
 using System.Net;
 using System.Data.Entity;
+using Microsoft.Reporting.WebForms;
 
 namespace Project.Controllers
 {
@@ -23,14 +24,14 @@ namespace Project.Controllers
 
         public List<teacher> GetteachersList()
         {
-            dbModels db = new dbModels();
+            DBmodel db = new DBmodel();
             List<teacher> teachers = db.teachers.ToList();
             return teachers;
         }
 
         public ActionResult GetSubjectList(int teacher_id)
         {
-            dbModels db = new dbModels();
+            DBmodel db = new DBmodel();
             List<teacher_subject> subID = db.teacher_subject.Where(x => x.teacher_id == teacher_id).ToList();
             
             foreach(var item in subID)
@@ -47,7 +48,7 @@ namespace Project.Controllers
 
         public ActionResult GetGradeList(int teacher_id)
         {
-            dbModels db = new dbModels();
+            DBmodel db = new DBmodel();
             List<teacher_grade> grades = db.teacher_grade.Where(x => x.teacher_id == teacher_id).ToList();
     
             ViewBag.gradeList = new SelectList(grades, "grade_id", "grade");
@@ -58,7 +59,7 @@ namespace Project.Controllers
         [HttpPost]
         public ActionResult Index(IEnumerable<HttpPostedFileBase> files,TeacherRel model, String message) 
         {
-            dbModels db = new dbModels();
+            DBmodel db = new DBmodel();
             upload_file log = new upload_file();
             upload_file_teacher log2 = new upload_file_teacher();
             
@@ -128,7 +129,7 @@ namespace Project.Controllers
 
         public ActionResult ViewList()
         {
-            dbModels db = new dbModels();
+            DBmodel db = new DBmodel();
 
             List<upload_file> files = db.upload_file.ToList();
 
@@ -149,7 +150,7 @@ namespace Project.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            dbModels db = new dbModels();
+            DBmodel db = new DBmodel();
             upload_file file = db.upload_file.Find(id);
 
             if(file == null)
@@ -165,7 +166,7 @@ namespace Project.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteSucces(int id)
         {
-            dbModels db = new dbModels();
+            DBmodel db = new DBmodel();
             upload_file file = db.upload_file.Find(id);
            
 
@@ -174,9 +175,9 @@ namespace Project.Controllers
             db.SaveChanges();
 
             var directory =new DirectoryInfo(Server.MapPath("~/UploadedFiles"));
-            FileInfo[] getFile = directory.GetFiles(file.file_name+".*");
-
-            System.IO.File.Delete(getFile[0].FullName);
+            //FileInfo[] getFile = directory.GetFiles(file.file_name+".*");
+            string getFile = directory.FullName + "\\" + file.file_name;
+            System.IO.File.Delete(getFile);
 
             db.upload_file.Remove(file);
             db.SaveChanges();
@@ -186,7 +187,7 @@ namespace Project.Controllers
 
         public ActionResult Edit(int? id)
         {
-            dbModels db = new dbModels();
+            DBmodel db = new DBmodel();
             upload_file file = db.upload_file.Find(id);
 
             ViewBag.teachersList = new SelectList(GetteachersList(), "teacher_id", "teacher_name");
@@ -201,7 +202,7 @@ namespace Project.Controllers
         {
             if (ModelState.IsValid)
             {
-                dbModels db = new dbModels();
+                DBmodel db = new DBmodel();
 
                 upload_file file = db.upload_file.Find(id);
 
@@ -252,17 +253,17 @@ namespace Project.Controllers
 
         public void ChangeFileName(int fileID,string fileName, string oldName)
         {
-            dbModels db = new dbModels();
+            DBmodel db = new DBmodel();
 
             upload_file file = db.upload_file.Find(fileID);
 
             var directory = new DirectoryInfo(Server.MapPath("~/UploadedFiles"));
-            FileInfo[] getFile = directory.GetFiles(oldName+".*");
-
+            //FileInfo[] getFile = directory.GetFiles(oldName+".*");
+            string getFile = directory.FullName + "\\" + oldName;
             //List<String> files = new List<string>();
             //var path = Path.Combine(Server.MapPath("~/UploadedFiles"), fileName);
 
-            System.IO.File.Move(getFile[0].FullName,directory.FullName+"\\"+fileName);
+            System.IO.File.Move(getFile,directory.FullName+"\\"+fileName);
 
             string path = file.file_path;
            
@@ -287,7 +288,7 @@ namespace Project.Controllers
           
         public ActionResult GetFileList()
         {
-            dbModels db = new dbModels();
+            DBmodel db = new DBmodel();
 
             List<subject> subjects = db.subjects.ToList();
 
@@ -299,7 +300,7 @@ namespace Project.Controllers
        
         public ActionResult GetFiles(TeacherRel model)
         {
-            dbModels db = new dbModels();
+            DBmodel db = new DBmodel();
 
             var grades = db.grades.Where(u => u.grade_id == model.grade_id)
                                                             .Select(u => new
@@ -319,12 +320,35 @@ namespace Project.Controllers
 
         public ActionResult GetAllGrades()
         {
-            dbModels db = new dbModels();
+            DBmodel db = new DBmodel();
             List<grade> grades = db.grades.ToList();
 
             ViewBag.allgradeList = new SelectList(grades, "grade_id", "grade1");
 
             return PartialView("DisplayAllGrades");
+        }
+
+        public ActionResult Report(string ReportType)
+        {
+            DBmodel db = new DBmodel();
+            LocalReport localReport = new LocalReport();
+            localReport.ReportPath = Server.MapPath("~/Reports/uploadFileReport.rdlc");
+
+            ReportDataSource reportDataSource = new ReportDataSource();
+            reportDataSource.Name = "UploadFiles";
+            reportDataSource.Value = db.upload_file.ToList();
+
+            localReport.DataSources.Add(reportDataSource);
+
+            string Rtype = ReportType;
+            string fileNameExtention = "pdf";
+            byte[] renderByte;
+
+            renderByte = localReport.Render(Rtype);
+
+            Response.AddHeader("content-disposition", "attachment:filename = upload_file_report_" + DateTime.Now + "." + fileNameExtention);
+            return File(renderByte, fileNameExtention);
+
         }
 
     }
