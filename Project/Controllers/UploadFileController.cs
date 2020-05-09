@@ -8,6 +8,7 @@ using System.IO;
 using System.Net;
 using System.Data.Entity;
 using Microsoft.Reporting.WebForms;
+using System.Data.Entity.Validation;
 
 namespace Project.Controllers
 {
@@ -103,7 +104,7 @@ namespace Project.Controllers
                                 {
                                     var fileName = file.FileName;
                                     var path = Path.Combine(Server.MapPath("~/UploadedFiles"), fileName);
-                                    file.SaveAs(path);
+                                    
 
                                     log.file_name = fileName;
                                     log.file_path = path;
@@ -128,14 +129,17 @@ namespace Project.Controllers
                                     log.grade = grades.grade;
                                     log.subject = subjects.subject;
 
-                                    db.upload_file.Add(log);
-                                    db.SaveChanges();
+                                    
+                                    //db.SaveChanges();
 
                                     int teacherid = model.teacher_id;
 
                                     log2.teacher_id = teacherid;
 
+                                    db.upload_file.Add(log);
                                     db.upload_file_teacher.Add(log2);
+
+                                    file.SaveAs(path);
                                     db.SaveChanges();
 
                                     count++;
@@ -171,12 +175,27 @@ namespace Project.Controllers
         }
         
         [HandleError]
-        public FileResult DownloadFile(string fileName)
+        public ActionResult DownloadFile(string fileName)
         {
-            
-                byte[] fileBytes = System.IO.File.ReadAllBytes(@"D:\MVC\Project\Project\UploadedFiles\" + fileName);
+            try {
+                DBmodel db = new DBmodel();
+
+                var directory = new DirectoryInfo(Server.MapPath("~/UploadedFiles"));
+                
+                string path = directory.FullName;
+                
+                //"D:\MVC\Project\Project\UploadedFiles\"
+                byte[] fileBytes = System.IO.File.ReadAllBytes(@path +"\\"+ fileName);
                 return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, fileName);
-           
+            }
+            catch(Exception ex)
+            {
+
+                return View("Error", new HandleErrorInfo(ex, "UploadFile", "DownloadFile"));
+
+            }
+
+
         }
 
         public ActionResult Delete(int? id)
@@ -213,15 +232,17 @@ namespace Project.Controllers
 
 
                 upload_file_teacher teacher = db.upload_file_teacher.Find(id);
-                db.upload_file_teacher.Remove(teacher);
-                db.SaveChanges();
+               
+                //db.SaveChanges();
 
                 var directory = new DirectoryInfo(Server.MapPath("~/UploadedFiles"));
                 //FileInfo[] getFile = directory.GetFiles(file.file_name+".*");
                 string getFile = directory.FullName + "\\" + file.file_name;
-                System.IO.File.Delete(getFile);
 
+                System.IO.File.Delete(getFile);
+                db.upload_file_teacher.Remove(teacher);
                 db.upload_file.Remove(file);
+
                 db.SaveChanges();
 
                 return RedirectToAction("ViewList");
@@ -267,8 +288,8 @@ namespace Project.Controllers
 
                     string oldName = file.file_name;
 
-                    file.file_name = model.file_name;
-
+                    file.file_name = model.file_name.Trim();
+                   
                     int gradeID = model.grade_id;
                     int subjectID = model.subject_id;
 
@@ -287,8 +308,15 @@ namespace Project.Controllers
                     file.grade = grade.grade;
                     file.subject = subject.subject;
 
-                    db.Entry(file).State = EntityState.Modified;
-                    db.SaveChanges();
+                    var directory = new DirectoryInfo(Server.MapPath("~/UploadedFiles"));
+                    string path = directory.FullName + "\\" + model.file_name;
+
+                    // path = "D:\\MVC\\Project\\Project\\UploadedFiles\\" + fileName;
+
+                    file.file_path = path.Trim();
+                    
+
+                    //db.SaveChanges();
 
                     int fileID = model.file_id;
 
@@ -296,9 +324,13 @@ namespace Project.Controllers
 
                     teacher.teacher_id = model.teacher_id;
 
-                    db.Entry(teacher).State = EntityState.Modified;
-                    db.SaveChanges();
+                    
 
+                   
+                   
+                    db.Entry(teacher).State = EntityState.Modified;
+                    db.Entry(file).State = EntityState.Modified;
+                    db.SaveChanges();
                     ChangeFileName(fileID, model.file_name, oldName);
 
                     return RedirectToAction("ViewList");
@@ -311,6 +343,7 @@ namespace Project.Controllers
             }
             catch (Exception ex)
             {
+                
                 return View("Error", new HandleErrorInfo(ex, "UploadFile", "EditSucces"));
             }
         }
@@ -319,29 +352,23 @@ namespace Project.Controllers
         public void ChangeFileName(int fileID,string fileName, string oldName)
         {
             try {
-                DBmodel db = new DBmodel();
-
-                upload_file file = db.upload_file.Find(fileID);
+                
 
                 var directory = new DirectoryInfo(Server.MapPath("~/UploadedFiles"));
                 //FileInfo[] getFile = directory.GetFiles(oldName+".*");
+
                 string getFile = directory.FullName + "\\" + oldName;
+
                 //List<String> files = new List<string>();
                 //var path = Path.Combine(Server.MapPath("~/UploadedFiles"), fileName);
 
                 System.IO.File.Move(getFile, directory.FullName + "\\" + fileName);
 
-                string path = file.file_path;
-
-                path = "D:\\MVC\\Project\\Project\\UploadedFiles\\" + fileName;
-
-                file.file_path = path;
-                db.Entry(file).State = EntityState.Modified;
-                db.SaveChanges();
+                
             }
             catch (Exception ex)
             {
-                throw new HttpException("File path Error");
+                
             }
         }
 
