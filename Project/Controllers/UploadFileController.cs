@@ -17,148 +17,188 @@ namespace Project.Controllers
         // GET: UploadFile
         public ActionResult Index()
         {
-            ViewBag.FileMessage = "Select file you want to upload";
-            ViewBag.teachersList = new SelectList(GetteachersList(), "teacher_id", "teacher_name");
-            return View();
+            try
+            {
+                ViewBag.FileMessage = "Select file you want to upload";
+                ViewBag.teachersList = new SelectList(GetteachersList(), "teacher_id", "teacher_name");
+                return View();
+            }
+            catch(Exception ex)
+            {
+                return View("Error", new HandleErrorInfo(ex, "UploadFile", "Index"));
+            }
+           
         }
 
+        [HandleError]
         public List<teacher> GetteachersList()
         {
+            List<teacher> teachers = null;
+           
             DBmodel db = new DBmodel();
-            List<teacher> teachers = db.teachers.ToList();
+            teachers = db.teachers.ToList();
+
             return teachers;
         }
 
         public ActionResult GetSubjectList(int teacher_id)
         {
-            DBmodel db = new DBmodel();
-            List<teacher_subject> subID = db.teacher_subject.Where(x => x.teacher_id == teacher_id).ToList();
-            
-            foreach(var item in subID)
-            {
-                int subjectId = item.subject_id;
-                
-                List<subject> subjects = db.subjects.Where(x => x.subject_id == subjectId).ToList();
-                ViewBag.subList = new SelectList(subjects, "subject_id", "subject1");
+            try {
+                DBmodel db = new DBmodel();
+                List<teacher_subject> subID = db.teacher_subject.Where(x => x.teacher_id == teacher_id).ToList();
+
+                foreach (var item in subID)
+                {
+                    int subjectId = item.subject_id;
+
+                    List<subject> subjects = db.subjects.Where(x => x.subject_id == subjectId).ToList();
+                    ViewBag.subList = new SelectList(subjects, "subject_id", "subject1");
+                }
+
+
+                return PartialView("DisplaySubjects");
             }
-           
-            
-            return PartialView("DisplaySubjects");
+            catch(Exception ex)
+            {
+                return View("Error", new HandleErrorInfo(ex, "UploadFile", "GetSubjectList"));
+
+            }
         }
 
         public ActionResult GetGradeList(int teacher_id)
         {
-            DBmodel db = new DBmodel();
-            List<teacher_grade> grades = db.teacher_grade.Where(x => x.teacher_id == teacher_id).ToList();
-    
-            ViewBag.gradeList = new SelectList(grades, "grade_id", "grade");
+            try {
+                DBmodel db = new DBmodel();
+                List<teacher_grade> grades = db.teacher_grade.Where(x => x.teacher_id == teacher_id).ToList();
 
-            return PartialView("DisplayGrades");
+                ViewBag.gradeList = new SelectList(grades, "grade_id", "grade");
+
+                return PartialView("DisplayGrades");
+            }catch(Exception ex)
+            {
+                return View("Error", new HandleErrorInfo(ex, "UploadFile", "GetGradeList"));
+            }
         }
 
         [HttpPost]
         public ActionResult Index(IEnumerable<HttpPostedFileBase> files,TeacherRel model, String message) 
         {
-            DBmodel db = new DBmodel();
-            upload_file log = new upload_file();
-            upload_file_teacher log2 = new upload_file_teacher();
-            
+            try {
+                    DBmodel db = new DBmodel();
+                    upload_file log = new upload_file();
+                    upload_file_teacher log2 = new upload_file_teacher();
 
-            int count = 0;
-            if (!ModelState.IsValid)
-            {
-                return new JsonResult { Data = "File not uploaded" };
-                //return View();
-            }
-            else
-            {
-                if (files != null)
-                {
-                    foreach (var file in files)
+                    int count = 0;
+                    if (!ModelState.IsValid)
                     {
-                        if (file != null && file.ContentLength > 0)
-                        {
-                            var fileName = file.FileName;
-                            var path = Path.Combine(Server.MapPath("~/UploadedFiles"), fileName);
-                            file.SaveAs(path);
-
-                            log.file_name = fileName;
-                            log.file_path = path;
-                            log.upload_date = DateTime.Now;
-
-                            int gradeid = model.grade_id;
-                            int subjectid = model.subject_id;
-
-
-                            var grades = db.grades.Where(u => u.grade_id == gradeid)
-                                                             .Select(u => new
-                                                             {
-                                                                 grade = u.grade1
-                                                             }).Single();
-
-                            var subjects = db.subjects.Where(u => u.subject_id == subjectid)
-                                                            .Select(u => new
-                                                            {
-                                                                subject = u.subject1
-                                                            }).Single();
-
-                            log.grade = grades.grade;
-                            log.subject = subjects.subject;
-
-                            db.upload_file.Add(log);
-                            db.SaveChanges();
-
-                            int teacherid = model.teacher_id;
-
-                            log2.teacher_id = teacherid;
-
-                            db.upload_file_teacher.Add(log2);
-                            db.SaveChanges();
-
-                            count++;
-                        }
+                        return new JsonResult { Data = "File not uploaded" };
                     }
-                     return new JsonResult { Data = "Successfully file Uploaded" };
-                }
-                else
-                    return new JsonResult { Data = "File not uploaded" };
+                    else
+                    {
+                        if (files != null)
+                        {
+                            foreach (var file in files)
+                            {
+                                if (file != null && file.ContentLength > 0)
+                                {
+                                    var fileName = file.FileName;
+                                    var path = Path.Combine(Server.MapPath("~/UploadedFiles"), fileName);
+                                    file.SaveAs(path);
 
+                                    log.file_name = fileName;
+                                    log.file_path = path;
+                                    log.upload_date = DateTime.Now;
+
+                                    int gradeid = model.grade_id;
+                                    int subjectid = model.subject_id;
+
+
+                                    var grades = db.grades.Where(u => u.grade_id == gradeid)
+                                                                     .Select(u => new
+                                                                     {
+                                                                         grade = u.grade1
+                                                                     }).Single();
+
+                                    var subjects = db.subjects.Where(u => u.subject_id == subjectid)
+                                                                    .Select(u => new
+                                                                    {
+                                                                        subject = u.subject1
+                                                                    }).Single();
+
+                                    log.grade = grades.grade;
+                                    log.subject = subjects.subject;
+
+                                    db.upload_file.Add(log);
+                                    db.SaveChanges();
+
+                                    int teacherid = model.teacher_id;
+
+                                    log2.teacher_id = teacherid;
+
+                                    db.upload_file_teacher.Add(log2);
+                                    db.SaveChanges();
+
+                                    count++;
+                                }
+                            }
+                            return new JsonResult { Data = "Successfully file Uploaded" };
+                        }
+                        else
+                            return new JsonResult { Data = "File not uploaded" };
+
+                    }
             }
-
+            catch(Exception ex)
+            {
+                return View("Error", new HandleErrorInfo(ex, "UploadFile", "Index"));
+            }
         }
 
         public ActionResult ViewList()
         {
-            DBmodel db = new DBmodel();
+            try {
+                DBmodel db = new DBmodel();
 
-            List<upload_file> files = db.upload_file.ToList();
+                List<upload_file> files = db.upload_file.ToList();
 
-            return View(files);
+                return View(files);
+            }
+            catch (Exception ex)
+            {
+                return View("Error", new HandleErrorInfo(ex, "UploadFile", "ViewList"));
+            }
 
         }
-
+        
+        [HandleError]
         public FileResult DownloadFile(string fileName)
         {
-            byte[] fileBytes = System.IO.File.ReadAllBytes(@"D:\MVC\Project\Project\UploadedFiles\"+fileName);
-            return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, fileName);
-        
+            
+                byte[] fileBytes = System.IO.File.ReadAllBytes(@"D:\MVC\Project\Project\UploadedFiles\" + fileName);
+                return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, fileName);
+           
         }
 
         public ActionResult Delete(int? id)
         {
-            if(id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            DBmodel db = new DBmodel();
-            upload_file file = db.upload_file.Find(id);
+            try {
+                if (id == null)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+                DBmodel db = new DBmodel();
+                upload_file file = db.upload_file.Find(id);
 
-            if(file == null)
-            {
-                return HttpNotFound();
+                if (file == null)
+                {
+                    return HttpNotFound();
+                }
+                return View(file);
             }
-            return View(file);
-            
+            catch(Exception ex)
+            {
+                return View("Error", new HandleErrorInfo(ex, "UploadFile", "Delete"));
+            }
         }
 
         [HttpPost]
@@ -166,33 +206,51 @@ namespace Project.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteSucces(int id)
         {
-            DBmodel db = new DBmodel();
-            upload_file file = db.upload_file.Find(id);
-           
+            try
+            {
+                DBmodel db = new DBmodel();
+                upload_file file = db.upload_file.Find(id);
 
-            upload_file_teacher teacher = db.upload_file_teacher.Find(id);
-            db.upload_file_teacher.Remove(teacher);
-            db.SaveChanges();
 
-            var directory =new DirectoryInfo(Server.MapPath("~/UploadedFiles"));
-            //FileInfo[] getFile = directory.GetFiles(file.file_name+".*");
-            string getFile = directory.FullName + "\\" + file.file_name;
-            System.IO.File.Delete(getFile);
+                upload_file_teacher teacher = db.upload_file_teacher.Find(id);
+                db.upload_file_teacher.Remove(teacher);
+                db.SaveChanges();
 
-            db.upload_file.Remove(file);
-            db.SaveChanges();
+                var directory = new DirectoryInfo(Server.MapPath("~/UploadedFiles"));
+                //FileInfo[] getFile = directory.GetFiles(file.file_name+".*");
+                string getFile = directory.FullName + "\\" + file.file_name;
+                System.IO.File.Delete(getFile);
 
-            return RedirectToAction("ViewList");
+                db.upload_file.Remove(file);
+                db.SaveChanges();
+
+                return RedirectToAction("ViewList");
+            }
+            catch (FileNotFoundException ex)
+            {
+                return View("Error", new HandleErrorInfo(ex, "UploadFile", "DeleteSucces"));
+            }
+            catch (Exception ex)
+            {
+                return View("Error", new HandleErrorInfo(ex, "UploadFile", "DeleteSucces"));
+            }
         }
 
         public ActionResult Edit(int? id)
         {
-            DBmodel db = new DBmodel();
-            upload_file file = db.upload_file.Find(id);
+            try
+            {
+                DBmodel db = new DBmodel();
+                upload_file file = db.upload_file.Find(id);
 
-            ViewBag.teachersList = new SelectList(GetteachersList(), "teacher_id", "teacher_name");
+                ViewBag.teachersList = new SelectList(GetteachersList(), "teacher_id", "teacher_name");
 
-            return View(file);
+                return View(file);
+            }
+            catch(Exception ex)
+            {
+                return View("Error", new HandleErrorInfo(ex, "UploadFile", "Edit"));
+            }
         }
 
         [HttpPost]
@@ -200,78 +258,91 @@ namespace Project.Controllers
         [ActionName("Edit")]
         public ActionResult EditSucces(int id,upload_file model)
         {
-            if (ModelState.IsValid)
-            {
-                DBmodel db = new DBmodel();
+            try {
+                if (ModelState.IsValid)
+                {
+                    DBmodel db = new DBmodel();
 
-                upload_file file = db.upload_file.Find(id);
+                    upload_file file = db.upload_file.Find(id);
 
-                string oldName = file.file_name;
+                    string oldName = file.file_name;
 
-                file.file_name = model.file_name;
+                    file.file_name = model.file_name;
 
-                int gradeID = model.grade_id;
-                int subjectID = model.subject_id;
+                    int gradeID = model.grade_id;
+                    int subjectID = model.subject_id;
 
-                var grade = db.grades.Where(m => m.grade_id == gradeID)
-                                .Select(u => new
-                                {
-                                    grade = u.grade1
-                                }).Single();
+                    var grade = db.grades.Where(m => m.grade_id == gradeID)
+                                    .Select(u => new
+                                    {
+                                        grade = u.grade1
+                                    }).Single();
 
-                var subject = db.subjects.Where(m => m.subject_id == subjectID)
-                                   .Select(u => new
-                                   {
-                                       subject = u.subject1
-                                   }).Single(); 
-               
-                file.grade = grade.grade;
-                file.subject = subject.subject ;
+                    var subject = db.subjects.Where(m => m.subject_id == subjectID)
+                                       .Select(u => new
+                                       {
+                                           subject = u.subject1
+                                       }).Single();
 
-                db.Entry(file).State = EntityState.Modified;
-                db.SaveChanges();
+                    file.grade = grade.grade;
+                    file.subject = subject.subject;
 
-                int fileID = model.file_id;
-            
-                upload_file_teacher teacher = db.upload_file_teacher.Find(fileID);
+                    db.Entry(file).State = EntityState.Modified;
+                    db.SaveChanges();
 
-                teacher.teacher_id = model.teacher_id;
+                    int fileID = model.file_id;
 
-                db.Entry(teacher).State = EntityState.Modified;
-                db.SaveChanges();
+                    upload_file_teacher teacher = db.upload_file_teacher.Find(fileID);
 
-                ChangeFileName(fileID, model.file_name,oldName);
+                    teacher.teacher_id = model.teacher_id;
 
-                return RedirectToAction("ViewList");
+                    db.Entry(teacher).State = EntityState.Modified;
+                    db.SaveChanges();
+
+                    ChangeFileName(fileID, model.file_name, oldName);
+
+                    return RedirectToAction("ViewList");
+                }
+                else
+                {
+                    ViewBag.teachersList = new SelectList(GetteachersList(), "teacher_id", "teacher_name");
+                    return View(model);
+                }
             }
-            else
+            catch (Exception ex)
             {
-                ViewBag.teachersList = new SelectList(GetteachersList(), "teacher_id", "teacher_name");
-                return View(model);
+                return View("Error", new HandleErrorInfo(ex, "UploadFile", "EditSucces"));
             }
         }
 
+        [HandleError]
         public void ChangeFileName(int fileID,string fileName, string oldName)
         {
-            DBmodel db = new DBmodel();
+            try {
+                DBmodel db = new DBmodel();
 
-            upload_file file = db.upload_file.Find(fileID);
+                upload_file file = db.upload_file.Find(fileID);
 
-            var directory = new DirectoryInfo(Server.MapPath("~/UploadedFiles"));
-            //FileInfo[] getFile = directory.GetFiles(oldName+".*");
-            string getFile = directory.FullName + "\\" + oldName;
-            //List<String> files = new List<string>();
-            //var path = Path.Combine(Server.MapPath("~/UploadedFiles"), fileName);
+                var directory = new DirectoryInfo(Server.MapPath("~/UploadedFiles"));
+                //FileInfo[] getFile = directory.GetFiles(oldName+".*");
+                string getFile = directory.FullName + "\\" + oldName;
+                //List<String> files = new List<string>();
+                //var path = Path.Combine(Server.MapPath("~/UploadedFiles"), fileName);
 
-            System.IO.File.Move(getFile,directory.FullName+"\\"+fileName);
+                System.IO.File.Move(getFile, directory.FullName + "\\" + fileName);
 
-            string path = file.file_path;
-           
-            path = "D:\\MVC\\Project\\Project\\UploadedFiles\\"+fileName;
+                string path = file.file_path;
 
-            file.file_path = path;
-            db.Entry(file).State = EntityState.Modified;
-            db.SaveChanges();
+                path = "D:\\MVC\\Project\\Project\\UploadedFiles\\" + fileName;
+
+                file.file_path = path;
+                db.Entry(file).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                throw new HttpException("File path Error");
+            }
         }
 
         public ActionResult homepage()
@@ -288,67 +359,94 @@ namespace Project.Controllers
           
         public ActionResult GetFileList()
         {
-            DBmodel db = new DBmodel();
+            try {
+                DBmodel db = new DBmodel();
 
-            List<subject> subjects = db.subjects.ToList();
+                List<subject> subjects = db.subjects.ToList();
 
-            ViewBag.subjectList =new SelectList(subjects, "subject_id", "subject1");
+                ViewBag.subjectList = new SelectList(subjects, "subject_id", "subject1");
 
-            return View();
+                return View();
+            }
+            catch(Exception ex)
+            {
+                return View("Error", new HandleErrorInfo(ex, "UploadFile", "GetFileList"));
+            }
         }
 
        
         public ActionResult GetFiles(TeacherRel model)
         {
-            DBmodel db = new DBmodel();
+            try {
+                DBmodel db = new DBmodel();
 
-            var grades = db.grades.Where(u => u.grade_id == model.grade_id)
-                                                            .Select(u => new
-                                                            {
-                                                                grade = u.grade1
-                                                            }).Single();
+                var grades = db.grades.Where(u => u.grade_id == model.grade_id)
+                                                                .Select(u => new
+                                                                {
+                                                                    grade = u.grade1
+                                                                }).Single();
 
-            var subjects = db.subjects.Where(u => u.subject_id == model.subject_id)
-                                            .Select(u => new
-                                            {
-                                                subject = u.subject1
-                                            }).Single();
+                var subjects = db.subjects.Where(u => u.subject_id == model.subject_id)
+                                                .Select(u => new
+                                                {
+                                                    subject = u.subject1
+                                                }).Single();
 
-            List<upload_file> files = db.upload_file.Where(x => x.grade == grades.grade && x.subject == subjects.subject).ToList();
-            return View(files);
+                List<upload_file> files = db.upload_file.Where(x => x.grade == grades.grade && x.subject == subjects.subject).ToList();
+                return View(files);
+            }
+            catch (Exception ex)
+            {
+                return View("Error", new HandleErrorInfo(ex, "UploadFile", "GetFiles"));
+            }
         }
 
         public ActionResult GetAllGrades()
         {
-            DBmodel db = new DBmodel();
-            List<grade> grades = db.grades.ToList();
+            try {
+                DBmodel db = new DBmodel();
+                List<grade> grades = db.grades.ToList();
 
-            ViewBag.allgradeList = new SelectList(grades, "grade_id", "grade1");
+                ViewBag.allgradeList = new SelectList(grades, "grade_id", "grade1");
 
-            return PartialView("DisplayAllGrades");
+                return PartialView("DisplayAllGrades");
+            }
+            catch(Exception ex)
+            {
+                return View("Error", new HandleErrorInfo(ex, "UploadFile", "GetAllGrades"));
+            }
         }
 
         public ActionResult Report(string ReportType)
         {
-            DBmodel db = new DBmodel();
-            LocalReport localReport = new LocalReport();
-            localReport.ReportPath = Server.MapPath("~/Reports/uploadFileReport.rdlc");
+            try {
+                DBmodel db = new DBmodel();
+                LocalReport localReport = new LocalReport();
+                localReport.ReportPath = Server.MapPath("~/Reports/uploadFileReport.rdlc");
 
-            ReportDataSource reportDataSource = new ReportDataSource();
-            reportDataSource.Name = "UploadFiles";
-            reportDataSource.Value = db.upload_file.ToList();
+                ReportDataSource reportDataSource = new ReportDataSource();
+                reportDataSource.Name = "UploadFiles";
+                reportDataSource.Value = db.upload_file.ToList();
 
-            localReport.DataSources.Add(reportDataSource);
+                localReport.DataSources.Add(reportDataSource);
 
-            string Rtype = ReportType;
-            string fileNameExtention = "pdf";
-            byte[] renderByte;
+                string Rtype = ReportType;
+                string fileNameExtention = "pdf";
+                byte[] renderByte;
 
-            renderByte = localReport.Render(Rtype);
+                renderByte = localReport.Render(Rtype);
 
-            Response.AddHeader("content-disposition", "attachment:filename = upload_file_report_" + DateTime.Now + "." + fileNameExtention);
-            return File(renderByte, fileNameExtention);
-
+                Response.AddHeader("content-disposition", "attachment:filename = upload_file_report_" + DateTime.Now + "." + fileNameExtention);
+                return File(renderByte, fileNameExtention);
+            }
+            catch(FileNotFoundException ex)
+            {
+                return View("Error", new HandleErrorInfo(ex, "UploadFile", "Report"));
+            }
+            catch(Exception ex)
+            {
+                return View("Error", new HandleErrorInfo(ex, "UploadFile", "Report"));
+            }
         }
 
     }
